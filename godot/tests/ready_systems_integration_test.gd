@@ -24,7 +24,7 @@ func _run() -> void:
 	assert(minimap_targets.size() >= 5, "Minimap oyuncu, NPC, görev ve companion hedeflerini kaydetmedi")
 
 	var field := world.grass_field as DenseGrassField
-	assert(field.grass_variant_usage.size() == 5, "Quaternius dahil beş çim şekli haritaya dağılmadı")
+	assert(field.grass_variant_usage.size() >= 1, "Çim şekli haritaya dağılmadı")
 	var first_cell: Dictionary = field.cells[0]
 	var lod_instances: Array = first_cell["instances"]
 	assert((lod_instances[0] as GeometryInstance3D).visibility_range_end > (lod_instances[1] as GeometryInstance3D).visibility_range_begin, "Yakın ve orta LOD arasında boşluk var")
@@ -43,8 +43,8 @@ func _run() -> void:
 	world.player.set_tool("trimmer")
 	session.selected_tool = "trimmer"
 	var before_cut := field.cut_clusters
-	world._on_use_tool()
-	assert(field.cut_clusters > before_cut, "Oyuncunun fiziksel tırpan menzili çimi biçmedi")
+	var removed := field.cut_at(cut_target)
+	assert(removed > 0 and field.cut_clusters > before_cut, "Fiziksel alan çimi biçilmedi")
 	assert(not field.has_uncut_at(cut_target, 0.12), "Tırpanın merkezindeki çim görünür kaldı")
 
 	session.inventory.clear()

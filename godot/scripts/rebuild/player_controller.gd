@@ -188,8 +188,9 @@ func _process(delta: float) -> void:
 	var hand_offset := tool_aim_yaw * 0.11 if tool_aim_active else 0.0
 	arm_root.rotation.x = lerpf(arm_root.rotation.x, -tool_aim_pitch * 0.24, delta * 10.0)
 	arm_root.rotation.y = lerpf(arm_root.rotation.y, hand_offset, delta * 10.0)
-	if body_visual != null and tool_aim_active:
-		body_visual.rotation.y = lerpf(body_visual.rotation.y, -tool_aim_yaw * 0.22, delta * 8.0)
+	if body_visual != null:
+		var body_tool_turn := -tool_aim_yaw * 0.22 if tool_aim_active else 0.0
+		body_visual.rotation.y = lerpf(body_visual.rotation.y, body_tool_turn, delta * 8.0)
 
 
 func recover_to_terrain(ground_height: float) -> void:

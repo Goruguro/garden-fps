@@ -9,13 +9,15 @@ var base_position: Vector3
 var variations := PackedFloat32Array()
 var tones := PackedFloat32Array()
 var shapes := PackedFloat32Array()
+var blade_x_positions := PackedFloat32Array()
+var animated_blade_count := 0
 var cutting := false
-var cut_animation_time := 0.0
 var cut_animation_duration := 0.52
 
 
 func setup(seed_value: int, tint: Color) -> void:
 	add_to_group("cuttable_grass")
+	set_process(true)
 	set_meta("interaction_kind", "grass")
 	base_position = position
 	var rng := RandomNumberGenerator.new()
@@ -28,6 +30,7 @@ func setup(seed_value: int, tint: Color) -> void:
 	variations.resize(CLUSTER_COUNT)
 	tones.resize(CLUSTER_COUNT)
 	shapes.resize(CLUSTER_COUNT)
+	blade_x_positions.resize(CLUSTER_COUNT)
 	for index in range(CLUSTER_COUNT):
 		var local_position := Vector3(rng.randf_range(-0.76, 0.76), 0.0, rng.randf_range(-0.76, 0.76))
 		var mirror_axis := -1.0 if rng.randf() < 0.46 else 1.0
@@ -43,6 +46,7 @@ func setup(seed_value: int, tint: Color) -> void:
 		variations[index] = variation
 		tones[index] = tone
 		shapes[index] = shape
+		blade_x_positions[index] = local_position.x
 		multimesh.set_instance_transform(index, Transform3D(basis, local_position))
 		multimesh.set_instance_custom_data(index, Color(0.0, variation, tone, shape))
 	blade_root = MultiMeshInstance3D.new()
@@ -60,19 +64,17 @@ func setup(seed_value: int, tint: Color) -> void:
 	add_child(collision)
 
 
-func _process(delta: float) -> void:
-	if not cutting or blade_root == null:
+func _apply_cut_progress(raw_progress: float) -> void:
+	if blade_root == null:
 		return
-	cut_animation_time = minf(cut_animation_time + delta, cut_animation_duration)
-	var progress := smoothstep(0.0, 1.0, cut_animation_time / cut_animation_duration)
+	var progress := smoothstep(0.0, 1.0, raw_progress)
 	var sweep_edge := lerpf(0.82, -0.82, progress)
+	animated_blade_count = 0
 	for index in range(blade_root.multimesh.instance_count):
-		var blade_x := blade_root.multimesh.get_instance_transform(index).origin.x
+		var blade_x := blade_x_positions[index]
 		if blade_x >= sweep_edge:
 			blade_root.multimesh.set_instance_custom_data(index, Color(1.0, variations[index], tones[index], shapes[index]))
-	if cut_animation_time >= cut_animation_duration:
-		cutting = false
-		_disable_collision()
+			animated_blade_count += 1
 
 
 func cut_grass() -> bool:
@@ -80,8 +82,14 @@ func cut_grass() -> bool:
 		return false
 	cut = true
 	cutting = true
-	cut_animation_time = 0.0
+	animated_blade_count = 0
 	set_meta("interaction_kind", "cut_grass")
+	var cut_tween := create_tween()
+	cut_tween.tween_method(_apply_cut_progress, 0.0, 1.0, cut_animation_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	cut_tween.tween_callback(func() -> void:
+		cutting = false
+		_apply_cut_progress(1.0)
+		_disable_collision())
 	return true
 
 
@@ -96,6 +104,7 @@ func restore_cut_state(should_be_cut: bool) -> void:
 		return
 	cut = true
 	cutting = false
+	animated_blade_count = CLUSTER_COUNT
 	for index in range(blade_root.multimesh.instance_count):
 		blade_root.multimesh.set_instance_custom_data(index, Color(1.0, variations[index], tones[index], shapes[index]))
 	for child: Node in get_children():

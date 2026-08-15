@@ -46,6 +46,7 @@ var animated_cut_queue: Array[Dictionary] = []
 
 
 func build(provider: Node, active_biome := &"home_garden", exclusions: Array = [], settings: MapGenerationProfile = null) -> void:
+	set_process(true)
 	height_provider = provider
 	generation_profile = settings if settings != null else WorldLevelCatalog.get_generation_profile(active_biome)
 	total_clusters = 0
@@ -98,9 +99,10 @@ func set_interactor_position(world_position: Vector3) -> void:
 
 
 func _process(delta: float) -> void:
+	var animation_delta := minf(delta, 0.05)
 	for queue_index in range(animated_cut_queue.size() - 1, -1, -1):
 		var entry: Dictionary = animated_cut_queue[queue_index]
-		entry["delay"] = float(entry["delay"]) - delta
+		entry["delay"] = float(entry["delay"]) - animation_delta
 		if float(entry["delay"]) > 0.0:
 			animated_cut_queue[queue_index] = entry
 			continue

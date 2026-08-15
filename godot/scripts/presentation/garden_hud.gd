@@ -20,6 +20,7 @@ var money_label: Label
 var tool_label: Label
 var condition_bar: ProgressBar
 var maintenance_bar: ProgressBar
+var fuel_bar: ProgressBar
 var prompt_label: Label
 var message_label: Label
 var hotbar_label: Label
@@ -68,6 +69,7 @@ func refresh() -> void:
 	tool_label.text = GardenToolSystem.display_name(session.selected_tool).to_upper()
 	condition_bar.value = float(session.condition.get(session.selected_tool, 100.0))
 	maintenance_bar.value = float(session.maintenance.get(session.selected_tool, 100.0))
+	fuel_bar.value = float(session.fuel.get("trimmer", 100.0)) if session.selected_tool == "trimmer" else 100.0
 	clock_label.text = "%02d:%02d" % [int(session.world_hour), int(fposmod(session.world_hour, 1.0) * 60.0)]
 	season_label.text = "%s  •  %d. GÜN  •  YAŞAYAN VADİ" % [["İLKBAHAR", "YAZ", "SONBAHAR", "KIŞ"][clampi(session.season_index, 0, 3)], session.world_day]
 	hotbar_label.text = "[1]  TIRPAN%s" % ("  • SEÇİLİ" if session.selected_tool == "trimmer" else "")
@@ -225,7 +227,7 @@ func _build_status_card() -> void:
 	panel.anchor_left = 1.0
 	panel.anchor_right = 1.0
 	panel.position = Vector2(-346, 25)
-	panel.size = Vector2(321, 190)
+	panel.size = Vector2(321, 222)
 	root.add_child(panel)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 5)
@@ -249,6 +251,9 @@ func _build_status_card() -> void:
 	box.add_child(_meter_title("BAKIM", "tekleme riski"))
 	maintenance_bar = UI.progress(UI.LEAF, 10)
 	box.add_child(maintenance_bar)
+	box.add_child(_meter_title("BENZİN", "motor çalışırken azalır"))
+	fuel_bar = UI.progress(UI.GOLD, 10)
+	box.add_child(fuel_bar)
 
 
 func _meter_title(left_text: String, right_text: String) -> Control:
@@ -588,7 +593,7 @@ func _build_pause_menu() -> void:
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right.add_theme_constant_override("separation", 12)
 	columns.add_child(right)
-	right.add_child(_guide_card("BAHÇECİLİK", "SOL TIK", "Aleti kullan", "E", "Etkileş / konuş", "I", "Çanta", "J", "Görevler"))
+	right.add_child(_guide_card("BAHÇECİLİK", "SOL TIK", "Tırpan motorunu çalıştır", "ALT + FARE", "Tırpanı bağımsız yönlendir", "SAĞDAN SOLA", "Kontrollü hızda biç", "E", "Etkileş / konuş"))
 	right.add_child(_system_card())
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 12)
@@ -638,7 +643,7 @@ func _system_card() -> PanelContainer:
 	box.add_child(UI.label("VADİ SİSTEMLERİ", 16, UI.TERRACOTTA, true))
 	box.add_child(UI.divider(Color("a88b50")))
 	var copy := UI.label(
-		"• Kondisyon makinenin fiziksel sağlığıdır.\n• Bakım düştükçe tekleme ihtimali artar.\n• Atölye seçili aleti ücretle yeniler.\n• Saat ilerledikçe ışık ve hava değişir.\n• Yeni bölgeler NPC görevleriyle açılır.",
+		"• Sol tık basılıyken motor çalışır ve benzin tüketir.\n• Yalnızca ot teması kondisyon ve bakım düşürür.\n• Alt basılıyken fare kamerayı değil tırpanı yönlendirir.\n• Çok hızlı veya ters yöndeki süpürme otu kesmez.\n• Atölye seçili aleti yeniler ve depoyu doldurur.",
 		14,
 		Color("4f503b")
 	)
