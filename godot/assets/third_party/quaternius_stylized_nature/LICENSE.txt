@@ -1,0 +1,8 @@
+Quaternius Stylized Nature MegaKit - Standard
+Source: https://quaternius.com/packs/stylizednaturemegakit.html
+Downloaded: 2026-08-15
+License: Creative Commons CC0 1.0 Universal (public domain dedication)
+
+This directory contains the free Standard glTF distribution. Assets may be used,
+modified, and redistributed in personal and commercial projects without attribution.
+Attribution is retained here as a courtesy and for provenance.

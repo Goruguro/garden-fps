@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dtjq6w6li3vwd"
+path="res://.godot/imported/Apple_4.obj-86a5caae0da2f7aa13af680c1aabd338.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Apple_4.obj-86a5caae0da2f7aa13af680c1aabd338.mesh"]
+
+source_file="res://assets/third_party/quaternius_ultimate_crops/Apple_4.obj"
+dest_files=["res://.godot/imported/Apple_4.obj-86a5caae0da2f7aa13af680c1aabd338.mesh", "res://.godot/imported/Apple_4.obj-86a5caae0da2f7aa13af680c1aabd338.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

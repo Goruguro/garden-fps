@@ -1,0 +1,79 @@
+{
+	"bahce_esyasi": {
+		"name": "Bahçe Eşyası",
+		"description": "Bahçede kullanılan temel bir eşya.",
+		"category": "misc",
+		"max_stack_size": 1,
+		"accent": "8aa06e"
+	},
+	"eski_tirpan": {
+		"inherits": "bahce_esyasi",
+		"name": "Benzinli Tırpan",
+		"description": "Uzun otları hızlıca temizler; düzenli bakım ister.",
+		"category": "tool",
+		"durability": 100.0,
+		"accent": "577b52"
+	},
+	"buyuk_makas": {
+		"inherits": "bahce_esyasi",
+		"name": "Büyük Bahçe Makası",
+		"description": "Çalıları ve süs bitkilerini biçimlendirir.",
+		"category": "tool",
+		"durability": 100.0,
+		"accent": "b96445"
+	},
+	"is_eldiveni": {
+		"inherits": "bahce_esyasi",
+		"name": "İş Eldiveni",
+		"description": "Tutuşu güçlendirir ve elleri dikenlerden korur.",
+		"category": "equipment",
+		"accent": "d2a84a"
+	},
+	"sulama_kabi": {
+		"inherits": "bahce_esyasi",
+		"name": "Sulama Kabı",
+		"description": "Genç fideleri elle sulamak için temel ekipman.",
+		"category": "tool",
+		"accent": "6697a1"
+	},
+	"gubre": {
+		"inherits": "bahce_esyasi",
+		"name": "Organik Gübre",
+		"description": "Toprağı zenginleştirir ve büyümeyi hızlandırır.",
+		"category": "consumable",
+		"max_stack_size": 20,
+		"accent": "8b6b45"
+	},
+	"kir_cicegi_tohumu": {
+		"inherits": "bahce_esyasi",
+		"name": "Kır Çiçeği Tohumu",
+		"description": "Renkli, mevsimlik bir çiçek karışımı.",
+		"category": "seed",
+		"max_stack_size": 50,
+		"accent": "c87986"
+	},
+	"ot_demeti": {
+		"inherits": "bahce_esyasi",
+		"name": "Biçilmiş Ot Demeti",
+		"description": "Kompost ya da satış için toplanmış taze ot.",
+		"category": "material",
+		"max_stack_size": 99,
+		"accent": "75a35c"
+	},
+	"otomasyon_parcasi": {
+		"inherits": "bahce_esyasi",
+		"name": "Otomasyon Parçası",
+		"description": "Sulama ve sera otomasyonlarında kullanılan parça.",
+		"category": "material",
+		"max_stack_size": 50,
+		"accent": "8b9190"
+	},
+	"budama_demeti": {
+		"inherits": "bahce_esyasi",
+		"name": "Budama Demeti",
+		"description": "Şekillendirilen çalılardan toplanan taze dallar.",
+		"category": "material",
+		"max_stack_size": 99,
+		"accent": "64805b"
+	}
+}

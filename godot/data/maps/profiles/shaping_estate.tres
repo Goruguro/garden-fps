@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="MapGenerationProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/map_generation_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"shaping_estate"
+display_name = "Şekillendirme Malikânesi"
+seed = 725113
+biome_type = "formal_garden"
+terrain_style = "terraced"
+terrain_amplitude = 0.05
+terrain_broad_frequency = 0.005
+terrain_detail_frequency = 0.014
+terrain_ridge_strength = 0.06
+grass_density = 0.86
+grass_min_height = 0.3
+grass_max_height = 0.88
+grass_patch_frequency = 0.025
+grass_detail_frequency = 0.07
+grass_density_frequency = 0.036
+grass_mirror_chance = 0.38
+grass_tilt_chance = 0.35
+grass_max_tilt_degrees = 4.5
+grass_shape_variation = 0.65
+tree_count = 30
+understory_count = 170
+tree_scale_range = Vector2(0.72, 1.02)
+plant_scale_range = Vector2(0.6, 1.05)
+tree_spacing = 4.6
+outer_ring_start = 48.0
+outer_ring_end = 112.0
+outer_tree_count = 72
+outer_plant_count = 340
+outer_grass_count = 8500
+tree_weights = {
+"common_tree_1.glb": 2.0,
+"common_tree_2.glb": 2.0,
+"common_tree_3.glb": 2.0,
+"dead_tree_1.glb": 0.0,
+"dead_tree_2.glb": 0.0,
+"pine_tree_1.glb": 0.08,
+"pine_tree_2.glb": 0.08,
+"pine_tree_3.glb": 0.08
+}
+plant_weights = {
+"bush_1.glb": 1.5,
+"bush_3.glb": 1.5,
+"bush_5.glb": 1.5,
+"bush_berries_1.glb": 1.0,
+"bush_berries_2.glb": 1.0,
+"flower_1.glb": 2.4,
+"flower_2.glb": 2.4,
+"flower_3.glb": 2.4,
+"mushroom_1.glb": 0.05,
+"mushroom_3.glb": 0.05,
+"mushroom_5.glb": 0.05,
+"mushroom_group_1.glb": 0.05,
+"plant_1.glb": 0.8,
+"plant_2.glb": 0.8,
+"plant_3.glb": 0.8,
+"tree_stump_1.glb": 0.0,
+"tree_stump_2.glb": 0.0
+}

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b86jrog3t3xd2"
+path="res://.godot/imported/garden.dialogue-0cd961b5e3870b88fb38471e79ea7ed9.tres"
+
+[deps]
+
+source_file="res://dialogue/garden.dialogue"
+dest_files=["res://.godot/imported/garden.dialogue-0cd961b5e3870b88fb38471e79ea7ed9.tres"]
+
+[params]
+
+defaults=true

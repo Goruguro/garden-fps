@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/rebuild/garden_world.gd" id="1_world"]
+[ext_resource type="Script" path="res://scripts/rebuild/player_controller.gd" id="2_player"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_player"]
+radius = 0.34
+height = 1.72
+
+[node name="GardenWorld" type="Node3D"]
+script = ExtResource("1_world")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(3.5, 1.1, 27)
+rotation = Vector3(0, 0.12, 0)
+script = ExtResource("2_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+position = Vector3(0, 0.86, 0)
+shape = SubResource("Capsule_player")
+
+[node name="Head" type="Node3D" parent="Player"]
+position = Vector3(0, 1.58, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head"]
+current = true
+fov = 76.0
+
+[node name="AimRay" type="RayCast3D" parent="Player/Head/Camera3D"]
+target_position = Vector3(0, 0, -4.2)
+collision_mask = 3
+collide_with_areas = true
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player"]
+position = Vector3(0, 1.45, 0)
+spring_length = 3.6
+margin = 0.15
+collision_mask = 1
+
+[node name="ThirdPersonCamera" type="Camera3D" parent="Player/SpringArm3D"]
+position = Vector3(0.65, 0.25, 0)
+fov = 72.0

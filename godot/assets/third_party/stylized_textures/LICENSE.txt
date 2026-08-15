@@ -1,0 +1,18 @@
+StylizedTextures.com terrain materials
+
+License: CC0 1.0 Universal (Public Domain Dedication)
+Source: https://stylizedtextures.com/browse
+License FAQ: https://stylizedtextures.com/faq
+
+Original 4K material names used by this project:
+- Stylized_Grass_001
+- Stylized_Grass_002
+- Stylized_Grass_003
+- Stylized_Ground_002
+- Stylized_Dry_Mud_001
+- Stylized_Rocks_001
+- Stylized_Rocks_003
+- Stylized_Ice_001
+
+The runtime copies are resized to 2048x2048 for a practical balance between
+close-up terrain detail, mip quality, download size, and GPU texture memory.

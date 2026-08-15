@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="MapGenerationProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/map_generation_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"home_garden"
+display_name = "Ev Bahçesi"
+seed = 481516
+biome_type = "garden"
+terrain_style = "rolling"
+terrain_amplitude = 0.04
+terrain_broad_frequency = 0.006
+terrain_detail_frequency = 0.021
+terrain_ridge_strength = 0.14
+grass_density = 1.0
+grass_min_height = 0.56
+grass_max_height = 1.08
+grass_patch_frequency = 0.012
+grass_detail_frequency = 0.032
+grass_density_frequency = 0.028
+grass_mirror_chance = 0.46
+grass_tilt_chance = 0.58
+grass_max_tilt_degrees = 8.0
+grass_shape_variation = 0.9
+tree_count = 24
+understory_count = 130
+tree_scale_range = Vector2(0.82, 1.2)
+plant_scale_range = Vector2(0.72, 1.28)
+tree_spacing = 4.1
+tree_width_multiplier_range = Vector2(0.76, 1.32)
+tree_height_multiplier_range = Vector2(0.84, 1.38)
+tree_mirror_chance = 0.32
+tree_max_tilt_degrees = 4.0
+plant_mirror_chance = 0.5
+plant_max_tilt_degrees = 9.0
+outer_ring_start = 48.0
+outer_ring_end = 120.0
+outer_tree_count = 118
+outer_plant_count = 390
+outer_grass_count = 12000
+outer_grass_height_range = Vector2(0.36, 1.22)
+tree_weights = {
+"common_tree_1.glb": 1.6,
+"common_tree_2.glb": 1.5,
+"common_tree_3.glb": 1.4,
+"dead_tree_1.glb": 0.12,
+"dead_tree_2.glb": 0.12,
+"pine_tree_1.glb": 0.45,
+"pine_tree_2.glb": 0.4,
+"pine_tree_3.glb": 0.35
+}
+plant_weights = {
+"bush_1.glb": 1.5,
+"bush_3.glb": 1.4,
+"bush_5.glb": 1.3,
+"bush_berries_1.glb": 1.2,
+"bush_berries_2.glb": 1.2,
+"flower_1.glb": 1.6,
+"flower_2.glb": 1.6,
+"flower_3.glb": 1.6,
+"mushroom_1.glb": 0.25,
+"mushroom_3.glb": 0.25,
+"mushroom_5.glb": 0.2,
+"mushroom_group_1.glb": 0.2,
+"plant_1.glb": 1.1,
+"plant_2.glb": 1.1,
+"plant_3.glb": 1.1,
+"tree_stump_1.glb": 0.2,
+"tree_stump_2.glb": 0.2
+}

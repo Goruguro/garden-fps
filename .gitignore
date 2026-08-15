@@ -1,0 +1,44 @@
+# Godot 4.x specific ignores
+.godot/
+godot/.godot/
+.import/
+godot/.import/
+export_credentials.cfg
+
+# Local downloads and heavy raw archives
+.downloads/
+godot/.downloads/
+*.zip
+*.tar.gz
+*.rar
+
+# Exported binaries
+bin/
+build/
+export/
+*.apk
+*.aab
+*.exe
+*.pck
+*.dmg
+*.app
+*.x86_64
+*.wasm
+*.html
+
+# User runtime data & logs
+user/
+godot/user/
+*.log
+godot_import_*.log
+
+# Editor & OS files
+.vscode/
+.idea/
+.fleet/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/

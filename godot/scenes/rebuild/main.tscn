@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bbjn6c52ha133"]
+
+[ext_resource type="Script" uid="uid://7xk6tnon01k1" path="res://scripts/rebuild/main.gd" id="1_main"]
+
+[node name="RebuiltMain" type="Node" unique_id=442455319]
+script = ExtResource("1_main")

@@ -1,0 +1,6 @@
+﻿Gasoline grass trimmer motor
+Source: https://freesound.org/people/Mihacappy/sounds/746334/
+Creator: Mihacappy
+License: CC0 1.0 Universal (Public Domain Dedication)
+
+This project uses a trimmed, mono gameplay loop derived from the source preview.

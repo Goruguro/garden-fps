@@ -1,0 +1,40 @@
+~ mira_job_offer
+Mira: Günaydın! Dere kenarındaki uzun otlar yürüyüş yolunu kapattı.
+Mira: Tırpanla 12 ot kümesini temizleyebilir misin?
+- Elbette, hemen başlarım.
+	Mira: Harika. Aletin kondisyonunu izle; zorlanırsa atölyeye uğra.
+- Önce ayrıntıları anlat.
+	Mira: Sol tıkla biç, Q ile alet değiştir. Otlar için tırpan kullanmalısın.
+
+~ mira_job_progress
+Mira: İşin güzel ilerliyor. Kalan otları dere kenarında bulabilirsin.
+- Bakım neden önemli?
+	Mira: Bakım düştükçe aletin tekleme ihtimali artar. Atölye ikisini de yeniler.
+- İşe dönüyorum.
+	Mira: Kolay gelsin!
+
+~ mira_job_complete
+Mira: Tertemiz olmuş! 260 ₺ ödemen hesabına geçti.
+Mira: Şimdi atölyeden büyük makası alabilirsin; çalı biçimlendirme işleri için gerekecek.
+
+~ mira_upgrade_hint
+Mira: Atölye evin yanındaki tentenin altında. Büyük makas 250 ₺.
+
+~ mira_after_upgrade
+Mira: İlk iş döngüsünü tamamladın. Bundan sonra yeni bahçe bölgelerini birlikte açacağız.
+
+~ yuzu_chat
+Yuzu: Mır... Bahçe bugün ıslak toprak ve çiçek kokuyor.
+- Yuzu'yu sev.
+	Yuzu: Mırrr!
+- Mira nerede?
+	Yuzu: Evin önündeki patikada seni bekliyor.
+
+~ workshop_upgrade
+Atölye: Büyük bahçe makası ekipman çantana eklendi.
+
+~ workshop_maintenance
+Atölye: Seçili aletin kondisyon ve bakım değerleri kontrol edildi.
+
+~ workshop_no_money
+Atölye: Bu yükseltme için biraz daha para kazanmalısın.

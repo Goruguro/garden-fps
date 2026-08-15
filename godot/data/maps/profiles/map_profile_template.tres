@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="MapGenerationProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/map_generation_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"new_map"
+display_name = "Yeni Harita"
+seed = 123456
+biome_type = "garden"
+terrain_style = "rolling"
+terrain_amplitude = 0.06
+terrain_broad_frequency = 0.006
+terrain_detail_frequency = 0.02
+terrain_ridge_strength = 0.2
+grass_density = 1.0
+grass_min_height = 0.45
+grass_max_height = 1.5
+grass_patch_frequency = 0.02
+grass_detail_frequency = 0.055
+grass_density_frequency = 0.03
+grass_mirror_chance = 0.45
+grass_tilt_chance = 0.58
+grass_max_tilt_degrees = 8.0
+grass_shape_variation = 0.9
+tree_count = 35
+understory_count = 150
+tree_scale_range = Vector2(0.8, 1.25)
+plant_scale_range = Vector2(0.7, 1.35)
+tree_spacing = 4.0
+tree_width_multiplier_range = Vector2(0.78, 1.28)
+tree_height_multiplier_range = Vector2(0.82, 1.32)
+tree_mirror_chance = 0.28
+tree_max_tilt_degrees = 3.5
+plant_mirror_chance = 0.48
+plant_max_tilt_degrees = 8.0
+outer_ring_start = 48.0
+outer_ring_end = 118.0
+outer_tree_count = 90
+outer_plant_count = 280
+outer_grass_count = 9000
+outer_grass_height_range = Vector2(0.38, 1.15)
+tree_weights = {}
+plant_weights = {}

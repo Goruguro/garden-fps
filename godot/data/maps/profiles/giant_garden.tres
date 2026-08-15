@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="MapGenerationProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/map_generation_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"giant_garden"
+display_name = "Devasa Bahçe"
+seed = 340117
+biome_type = "giant_garden"
+terrain_style = "hummocks"
+terrain_amplitude = 0.12
+terrain_broad_frequency = 0.0055
+terrain_detail_frequency = 0.017
+terrain_ridge_strength = 0.26
+grass_density = 1.0
+grass_min_height = 1.35
+grass_max_height = 2.72
+grass_patch_frequency = 0.009
+grass_detail_frequency = 0.025
+grass_density_frequency = 0.019
+grass_mirror_chance = 0.5
+grass_tilt_chance = 0.7
+grass_max_tilt_degrees = 12.0
+grass_shape_variation = 1.0
+tree_count = 38
+understory_count = 210
+tree_scale_range = Vector2(2.4, 4.2)
+plant_scale_range = Vector2(2.5, 5.2)
+tree_spacing = 6.8
+tree_width_multiplier_range = Vector2(0.7, 1.42)
+tree_height_multiplier_range = Vector2(0.9, 1.6)
+outer_ring_start = 50.0
+outer_ring_end = 142.0
+outer_tree_count = 80
+outer_plant_count = 310
+outer_grass_count = 10500
+tree_weights = {
+"common_tree_1.glb": 1.3,
+"common_tree_2.glb": 1.3,
+"common_tree_3.glb": 1.2,
+"dead_tree_1.glb": 0.2,
+"dead_tree_2.glb": 0.2,
+"pine_tree_1.glb": 0.7,
+"pine_tree_2.glb": 0.7,
+"pine_tree_3.glb": 0.7
+}
+plant_weights = {
+"bush_1.glb": 1.0,
+"bush_3.glb": 1.0,
+"bush_5.glb": 1.0,
+"bush_berries_1.glb": 0.7,
+"bush_berries_2.glb": 0.7,
+"flower_1.glb": 1.6,
+"flower_2.glb": 1.6,
+"flower_3.glb": 1.6,
+"mushroom_1.glb": 1.4,
+"mushroom_3.glb": 1.4,
+"mushroom_5.glb": 1.4,
+"mushroom_group_1.glb": 1.8,
+"plant_1.glb": 1.3,
+"plant_2.glb": 1.3,
+"plant_3.glb": 1.3,
+"tree_stump_1.glb": 0.4,
+"tree_stump_2.glb": 0.4
+}

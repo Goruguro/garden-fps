@@ -1,0 +1,18 @@
+Poly Haven 2K ground materials
+
+License: CC0 1.0 Universal (Public Domain Dedication)
+Source: https://polyhaven.com/textures
+
+Assets used:
+- sparse_grass
+- dirt
+- forest_floor
+- forrest_ground_03
+- mud_forest
+- stony_dirt_path
+- grass_path_3
+- snow_02
+
+Diffuse and OpenGL normal maps are used at 2048x2048 with mipmaps and GPU
+compression. The original authors and per-asset metadata are available on each
+asset page and through https://api.polyhaven.com/files/{asset_id}.

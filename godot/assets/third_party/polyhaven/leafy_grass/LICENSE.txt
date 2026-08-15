@@ -1,0 +1,5 @@
+﻿Asset: leafy_grass
+Source: https://polyhaven.com/a/leafy_grass
+License: CC0 1.0 Universal
+Downloaded: 1K JPG diffuse, OpenGL normal, ARM
+Date: 2026-08-13
