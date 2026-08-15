@@ -14,6 +14,11 @@ const LOD_RANGES := [
 	[48.0, 118.0, 22.0, 28.0],
 ]
 const GRASS_CUT_SOUND := preload("res://audio/sfx/grass_cut.ogg")
+const GROWTH_MAP_WIDTH := 64
+const GROWTH_MAP_HEIGHT := 64
+const GROWTH_UPDATE_INTERVAL := 0.5
+const FULL_GROWTH_HOURS := 720.0
+const BASE_REGROW_WAIT_HOURS := 48.0
 
 var total_clusters := 0
 var cut_clusters := 0
@@ -43,6 +48,11 @@ var grass_variant_usage: Dictionary = {}
 var snow_zone_center := Vector2(-34.0, -28.0)
 var snow_zone_radius := 12.0
 var animated_cut_queue: Array[Dictionary] = []
+var growth_image: Image
+var growth_texture: ImageTexture
+var growth_grid: PackedFloat32Array
+var regrow_wait_grid: PackedFloat32Array
+var growth_sim_accumulator := 0.0
 
 
 func build(provider: Node, active_biome := &"home_garden", exclusions: Array = [], settings: MapGenerationProfile = null) -> void:
@@ -55,6 +65,7 @@ func build(provider: Node, active_biome := &"home_garden", exclusions: Array = [
 	tilted_cluster_count = 0
 	minimum_height_factor = INF
 	maximum_height_factor = 0.0
+	growth_sim_accumulator = 0.0
 	grass_variant_usage.clear()
 	cells.clear()
 	map_exclusions.clear()
@@ -62,6 +73,7 @@ func build(provider: Node, active_biome := &"home_garden", exclusions: Array = [
 		map_exclusions.append(Dictionary(exclusion_value).duplicate(true))
 	_configure_biome(active_biome)
 	_configure_noise()
+	_initialize_growth_map()
 	var columns := int(ceil((FIELD_MAX.x - FIELD_MIN.x) / CELL_SIZE))
 	var rows := int(ceil((FIELD_MAX.y - FIELD_MIN.y) / CELL_SIZE))
 	for row in range(rows):
@@ -112,6 +124,109 @@ func _process(delta: float) -> void:
 		for multimesh_value: Variant in multimeshes:
 			(multimesh_value as MultiMesh).set_instance_custom_data(instance_index, custom_data)
 		animated_cut_queue.remove_at(queue_index)
+
+	growth_sim_accumulator += delta
+	if growth_sim_accumulator >= GROWTH_UPDATE_INTERVAL:
+		var in_game_hours := growth_sim_accumulator * (1.08 / 60.0)
+		advance_growth(in_game_hours)
+		growth_sim_accumulator = 0.0
+
+
+func _initialize_growth_map() -> void:
+	growth_image = Image.create(GROWTH_MAP_WIDTH, GROWTH_MAP_HEIGHT, false, Image.FORMAT_R8)
+	growth_grid.resize(GROWTH_MAP_WIDTH * GROWTH_MAP_HEIGHT)
+	regrow_wait_grid.resize(GROWTH_MAP_WIDTH * GROWTH_MAP_HEIGHT)
+	for y in range(GROWTH_MAP_HEIGHT):
+		for x in range(GROWTH_MAP_WIDTH):
+			var idx := y * GROWTH_MAP_WIDTH + x
+			var wx := lerpf(FIELD_MIN.x, FIELD_MAX.x, float(x) / float(GROWTH_MAP_WIDTH - 1))
+			var wz := lerpf(FIELD_MIN.y, FIELD_MAX.y, float(y) / float(GROWTH_MAP_HEIGHT - 1))
+			var h_factor := get_height_factor_at(Vector3(wx, 0.0, wz))
+			var initial_growth := clampf((h_factor - grass_min_height) / maxf(grass_max_height - grass_min_height, 0.01) * 0.18 + 0.74, 0.70, 0.92)
+			growth_grid[idx] = initial_growth
+			regrow_wait_grid[idx] = 0.0
+			growth_image.set_pixel(x, y, Color(initial_growth, 0, 0, 1.0))
+	growth_texture = ImageTexture.create_from_image(growth_image)
+	GrassVisualFactory.set_growth_map(growth_texture, FIELD_MIN, FIELD_MAX - FIELD_MIN)
+
+
+func advance_growth(in_game_hours: float) -> void:
+	if growth_image == null or growth_grid.is_empty() or in_game_hours <= 0.0:
+		return
+	var remaining := in_game_hours
+	while remaining > 0.0:
+		var step_hours := minf(remaining, 6.0)
+		_simulate_growth_step(step_hours)
+		remaining -= step_hours
+	growth_texture.update(growth_image)
+
+
+func _simulate_growth_step(step_hours: float) -> void:
+	var rate_mult := (step_hours / FULL_GROWTH_HOURS) * 20.0
+	var next_grid := growth_grid.duplicate()
+	for y in range(GROWTH_MAP_HEIGHT):
+		for x in range(GROWTH_MAP_WIDTH):
+			var idx := y * GROWTH_MAP_WIDTH + x
+			var local_rate := rate_mult
+			if regrow_wait_grid[idx] > 0.0:
+				var wait_time: float = regrow_wait_grid[idx]
+				if wait_time > step_hours:
+					regrow_wait_grid[idx] = wait_time - step_hours
+					next_grid[idx] = 0.08
+					growth_image.set_pixel(x, y, Color(0.08, 0, 0, 1.0))
+					continue
+				else:
+					regrow_wait_grid[idx] = 0.0
+					var remaining_hours := step_hours - wait_time
+					local_rate = (remaining_hours / FULL_GROWTH_HOURS) * 20.0
+			var current: float = growth_grid[idx]
+			if current < 0.80:
+				# Below 80%: mostly grows (78% grow, 22% shrink/pause)
+				if randf() < 0.78:
+					current += randf_range(0.025, 0.065) * maxf(local_rate, 0.05)
+				else:
+					current -= randf_range(0.005, 0.015) * local_rate
+			else:
+				# Above 80%: shrink/settle is higher than grow to prevent monotonous wall (68% shrink, 32% grow)
+				if randf() < 0.68:
+					current -= randf_range(0.015, 0.035) * local_rate
+				else:
+					current += randf_range(0.006, 0.018) * local_rate
+
+			# 4-neighbor smoothing ensures maximum neighbor difference <= 0.12 in uncut/regrown areas
+			var left := y * GROWTH_MAP_WIDTH + maxi(0, x - 1)
+			var right := y * GROWTH_MAP_WIDTH + mini(GROWTH_MAP_WIDTH - 1, x + 1)
+			var up := maxi(0, y - 1) * GROWTH_MAP_WIDTH + x
+			var down := mini(GROWTH_MAP_HEIGHT - 1, y + 1) * GROWTH_MAP_WIDTH + x
+			var neighbor_avg := (growth_grid[left] + growth_grid[right] + growth_grid[up] + growth_grid[down]) * 0.25
+			current = lerpf(current, neighbor_avg, 0.28)
+			current = clampf(current, neighbor_avg - 0.12, neighbor_avg + 0.12)
+			var final_val := clampf(current, 0.08, 1.0)
+			next_grid[idx] = final_val
+			growth_image.set_pixel(x, y, Color(final_val, 0, 0, 1.0))
+	growth_grid = next_grid
+
+
+func _paint_cut_on_growth_map(world_pos: Vector3, radius: float) -> void:
+	if growth_image == null or growth_grid.is_empty():
+		return
+	var u := clampf((world_pos.x - FIELD_MIN.x) / (FIELD_MAX.x - FIELD_MIN.x), 0.0, 1.0)
+	var v := clampf((world_pos.z - FIELD_MIN.y) / (FIELD_MAX.y - FIELD_MIN.y), 0.0, 1.0)
+	var px := int(u * float(GROWTH_MAP_WIDTH - 1))
+	var py := int(v * float(GROWTH_MAP_HEIGHT - 1))
+	var pixel_step_x := (FIELD_MAX.x - FIELD_MIN.x) / float(GROWTH_MAP_WIDTH)
+	var pixel_step_z := (FIELD_MAX.y - FIELD_MIN.y) / float(GROWTH_MAP_HEIGHT)
+	var pixel_radius := maxi(1, int(ceil(radius / minf(pixel_step_x, pixel_step_z))))
+
+	for y in range(maxi(0, py - pixel_radius), mini(GROWTH_MAP_HEIGHT, py + pixel_radius + 1)):
+		for x in range(maxi(0, px - pixel_radius), mini(GROWTH_MAP_WIDTH, px + pixel_radius + 1)):
+			var dist_sq := float((x - px) * (x - px) + (y - py) * (y - py))
+			if dist_sq <= float(pixel_radius * pixel_radius):
+				var idx := y * GROWTH_MAP_WIDTH + x
+				growth_grid[idx] = 0.08
+				regrow_wait_grid[idx] = randf_range(BASE_REGROW_WAIT_HOURS * 0.8, BASE_REGROW_WAIT_HOURS * 1.3)
+				growth_image.set_pixel(x, y, Color(0.08, 0, 0, 1.0))
+	growth_texture.update(growth_image)
 
 
 func set_wetness(value: float) -> void:
@@ -191,6 +306,7 @@ func cut_at(world_position: Vector3, radius := 1.45, create_effect := true) -> i
 			cell["lod_cut_counts"] = lod_cut_counts
 	cut_clusters += removed
 	if removed > 0:
+		_paint_cut_on_growth_map(world_position, radius)
 		if create_effect:
 			spawn_cut_effect(world_position, removed)
 		grass_cut.emit(world_position, removed)

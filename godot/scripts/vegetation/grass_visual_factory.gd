@@ -65,6 +65,9 @@ uniform vec3 interactor_position = vec3(0.0);
 uniform float interaction_radius : hint_range(0.1, 3.0) = 1.35;
 uniform float interaction_strength : hint_range(0.0, 0.8) = 0.34;
 uniform float wetness : hint_range(0.0, 1.0) = 0.0;
+uniform sampler2D growth_map : filter_linear, repeat_disable;
+uniform vec2 map_min = vec2(-48.0, -42.0);
+uniform vec2 map_size = vec2(96.0, 84.0);
 
 varying float blade_height;
 varying float blade_variation;
@@ -97,7 +100,12 @@ void vertex() {
 	vec2 interaction_direction = interaction_distance > 0.001 ? interaction_delta / interaction_distance : vec2(1.0, 0.0);
 	float interaction = 1.0 - smoothstep(interaction_radius * 0.22, interaction_radius, interaction_distance);
 	VERTEX.xz += interaction_direction * interaction * interaction_strength * blade_height * blade_height * alive;
-	VERTEX.y *= mix(1.0, 0.075, blade_cut);
+
+	vec2 world_uv = clamp((world_origin.xz - map_min) / map_size, vec2(0.0), vec2(1.0));
+	float regional_growth = texture(growth_map, world_uv).r;
+	float individual_diff = mix(0.95, 1.05, blade_variation);
+	float effective_growth = clamp(regional_growth * individual_diff, 0.08, 1.15);
+	VERTEX.y *= mix(effective_growth, 0.075, blade_cut);
 }
 
 void fragment() {
@@ -130,6 +138,14 @@ static func set_wetness(value: float) -> void:
 	var safe_value := clampf(value, 0.0, 1.0)
 	for cached_material: Variant in _material_cache.values():
 		(cached_material as ShaderMaterial).set_shader_parameter("wetness", safe_value)
+
+
+static func set_growth_map(texture: Texture2D, min_bounds: Vector2, size_bounds: Vector2) -> void:
+	for cached_material: Variant in _material_cache.values():
+		var mat := cached_material as ShaderMaterial
+		mat.set_shader_parameter("growth_map", texture)
+		mat.set_shader_parameter("map_min", min_bounds)
+		mat.set_shader_parameter("map_size", size_bounds)
 
 
 static func _build_cluster_mesh(lod_level: int) -> ArrayMesh:
